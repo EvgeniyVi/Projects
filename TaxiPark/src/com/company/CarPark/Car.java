@@ -1,57 +1,76 @@
 package com.company.CarPark;
 
-import com.company.Dispatcher.CallCar;
+//import com.company.Dispatcher.CallCar;
 
+import java.lang.annotation.Inherited;
 import java.util.ArrayList;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 
 public class Car {
+    private final int id;
+    private final String nameCar;
+    private final String color;
+    private final String typeCar;
+    private final String registrationNumber;
 
-    CallCar callCar = new CallCar();
-    int id;
-    public String nameСar;
-    public String color;
-    public int registrationNumber;
 
 
-    public Car(int id, String nameСar, String color, int registrationNumber) {
-        this.id = id;
-        this.nameСar = nameСar;
-        this.color = color;
-        this.registrationNumber = registrationNumber;
+    private Car(Builder builder){
+        this.nameCar = builder.nameCar;
+        this.color = builder.color;
+        this.id = builder.id;
+        this.typeCar = builder.typeCar;
+        this.registrationNumber = builder.registrationNumber;
     }
 
+    static class Builder{
+//        Pattern pattern = Pattern.compile("[^-0-9]" , Integer.parseInt(""));
 
-    public void passengerCar() {
-        Car Chevrolet = new Car(1, "Chevrolet aveo", "синего", 2416);
-        Car Nissan = new Car(2, "Nissan leaf", "серого", 1258);
-        Car Toyota = new Car(3, "Toyota prado", "черного", 1140);
-        Car Ravon = new Car(4, "Ravon ", "белого", 3658);
-        Car Mercedes = new Car(5, "Mercedes", "серого", 1258);
-        ArrayList<Car> passengerCar = new ArrayList<>();
-        passengerCar.add(Chevrolet);
-        passengerCar.add(Nissan);
-        passengerCar.add(Toyota);
-        passengerCar.add(Ravon);
-        passengerCar.add(Mercedes);
-        callCar.randomCar(passengerCar);
+        private int id;
+        private String nameCar;
+        private String color = "gray";
+        private String typeCar;
+        private String registrationNumber;
+
+        public Builder(String nameCar){
+            this.nameCar = nameCar;
+        }
+
+        public Builder setId(int id){
+            this.id = id;
+            return this;
+        }
+
+        public Builder setColor(String color){
+            this.color = color;
+            return this;
+        }
+
+        public Builder setRegistrationNumber(String registrationNumber){
+//
+
+            boolean onlyNumber = registrationNumber.matches("\\d{5}");
+            if(!onlyNumber){
+                throw new IllegalArgumentException(registrationNumber +" Enter 4 number");
+            }
+            this.registrationNumber = registrationNumber;
+            return this;
+        }
+
+        public Builder typeCar(String typeCar){
+            this.typeCar = typeCar;
+            return this;
+        }
+        public Car build(){
+            return new Car(this);
+        }
+    }
+    @Override
+    public String toString(){
+        return "Avto " + nameCar + " color " + color + " number "  + registrationNumber;
     }
 
-    public void truckCar() {
-        Car Gazel = new Car(6, "Gazel", "белого", 1012);
-        Car Tata = new Car(7, "Tata", "белого", 2569);
-        Car Man = new Car(8, "Man", "красного", 2396);
-        Car Volvo = new Car(9, "Volvo", "синего", 5123);
-        Car Reno = new Car(10, "Reno", "желтого", 1713);
-        ArrayList<Car> truckCar = new ArrayList<>();
-        truckCar.add(Gazel);
-        truckCar.add(Tata);
-        truckCar.add(Man);
-        truckCar.add(Volvo);
-        truckCar.add(Reno);
-        callCar.randomCar(truckCar);
-    }
-
-    public Car() {
-    }
 }
+
